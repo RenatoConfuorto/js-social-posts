@@ -101,3 +101,22 @@ function createFooterPost(element){
 
   return footerPost;
 }
+
+// funzionalità del bottone like 
+const likeBtns = document.querySelectorAll('.like-button');
+const likeDisplays = document.querySelectorAll('.js-likes-counter');
+
+likeBtns.forEach( element => {
+  element.addEventListener('click', likebtnClick);
+});
+
+function likebtnClick(){
+  this.classList.add('like-button--liked');
+
+  const elementIndex = parseInt(this.getAttribute('data-postid')) - 1;
+  
+  let {likes} = posts[elementIndex];
+  likes++;
+  likeDisplays[elementIndex].innerText = likes;
+  // console.log(likes);
+}
