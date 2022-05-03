@@ -35,22 +35,59 @@ function createHeader(element){
 
   const index = posts.indexOf(element);
   const {author, created} = posts[index];
-  console.log(author);
+  // console.log(author);
+  let {name, image} = author
+  let profilePic = `<img class="profile-pic" src="${author.image}" alt="${author.name}"> `;
 
+  //creare un'immagine alternativa se non c'è immagine del profilo
+  if(author.image === ''){
+    const initials = getAuthorInitials(author.name);
+
+    profilePic = `
+    <div class="profile-pic-default">
+      <span>
+      ${initials}
+      </span>
+    </div>`
+  }
+
+  
+  const formattedDate = dateFormat(created);
   const headerContent = `
     <div class="post-meta">                    
         <div class="post-meta__icon">
-            <img class="profile-pic" src="${author.image}" alt="${author.name}">                    
+          ${profilePic}
         </div>
         <div class="post-meta__data">
             <div class="post-meta__author">${author.name}</div>
-            <div class="post-meta__time">${created}</div>
+            <div class="post-meta__time">${formattedDate}</div>
         </div>                    
     </div>
   `;
   header.innerHTML = headerContent;
 
   return header;
+}
+
+function getAuthorInitials(name){
+  // ricavare le parole che compongono i nomi dell'autore
+  const nameWords = name.split(' ');
+  
+  //prendere le iniziali dei primi due nomi
+  const initials = nameWords[0].charAt(0) + nameWords[1].charAt(0);
+  return initials;
+}
+
+function dateFormat(dateElement){
+  const day = dateElement.slice(3, 5);
+  const month = dateElement.slice(0, 2);
+  const year = dateElement.slice(6);
+  // console.log(day, month, year);
+
+  const formattedDate = `${day}-${month}-${year}`;
+  // console.log(formattedDate);
+
+  return formattedDate;
 }
 
 function createTextPost(element){
@@ -111,12 +148,39 @@ likeBtns.forEach( element => {
 });
 
 function likebtnClick(){
-  this.classList.add('like-button--liked');
-
+  //recuperare il likeDisplay e numero di like corrispondenti
   const elementIndex = parseInt(this.getAttribute('data-postid')) - 1;
+  const currentLikeDisplay = likeDisplays[elementIndex];
   
   let {likes} = posts[elementIndex];
-  likes++;
-  likeDisplays[elementIndex].innerText = likes;
+
+  if(this.classList.contains('like-button--liked')){
+    //togliere like
+    removeLike(this, likes, currentLikeDisplay);
+    //aggiornare il numero di like nell'array
+    posts[elementIndex].likes--;
+  }else{
+    //mettere like
+    addLike(this, likes, currentLikeDisplay);
+    //aggiornare il numero di like nell'array
+    posts[elementIndex].likes++;
+  }
+
+  
+
   // console.log(likes);
+}
+
+function addLike(currentElement, number, display){
+  currentElement.classList.add('like-button--liked');
+  
+  number++;
+  display.innerText = number;
+}
+
+function removeLike(currentElement, number, display){
+  currentElement.classList.remove('like-button--liked');
+  
+  number--;
+  display.innerText = number;
 }

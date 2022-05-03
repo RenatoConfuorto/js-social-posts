@@ -32,4 +32,15 @@ const posts = [
         "likes": 37,
         "created": "09-15-2021"
     },
+    {
+        "id": 4,
+        "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas, aliquid neque dignissimos molestiae est assumenda, repudiandae quidem eaque cum laborum obcaecati recusandae voluptates totam.",
+        "media": "",
+        "author": {
+            "name": "Giovanni Pio Franzese",
+            "image": ""
+        },
+        "likes": 21,
+        "created": "03-08-2020"
+    },
 ];
